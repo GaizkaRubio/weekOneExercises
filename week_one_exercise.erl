@@ -2,6 +2,8 @@
 
 -export([perimeter/1, area/1, enclose/1, bits/1, bitsTail/1]). 
 
+-include_lib("eunit/include/eunit.hrl").
+
 perimeter({circle, {_X,_Y}, R}) ->
 	math:pi() * 2 * R;
 
@@ -49,3 +51,20 @@ bitsTailRec(0, Sum) ->
 
 bitsTailRec(N, Sum) -> 
 	bitsTailRec(N bsr 1, Sum + (N band 1)).
+
+
+perimeter_test()->
+	 ?assert(perimeter({rectangle, {0, 0}, 5, 5}) =:= 20),
+	 ?assert(perimeter({circle, {0, 0}, 10}) =:= 62.83185307179586),
+	 ?assert(perimeter({triangle, {0, 0}, 5, 6, 7}) =:= 18).
+
+area_test()->
+	 ?assert(area({rectangle, {0, 0}, 5, 5}) =:= 25),
+	 ?assert(area({circle, {0, 0}, 10}) =:= 314.1592653589793),
+	 ?assert(area({triangle, {0, 0}, 5, 6, 7}) =:= 14.696938456699069).
+
+bits_test() ->
+	?assert(bits(8) =:= bitsTail(8)),
+	?assert(bits(7) =:= bitsTail(7)),
+	?assert(bits(0) =:= bitsTail(0)).
+
