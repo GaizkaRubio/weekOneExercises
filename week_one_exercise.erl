@@ -30,9 +30,9 @@ enclose({rectangle, {X, Y}, H, W}) ->
 	{rectangle, {X, Y}, H, W};
 
 enclose({triangle, {X, Y}, A, B, C}) ->
-	A = area({triangle, {X, Y}, A, B, C}),
+	Ar = area({triangle, {X, Y}, A, B, C}),
 	W = erlang:max(erlang:max(A,B),C),
-	H = (A * 2) - W,
+	H = (Ar * 2) - W,
 	{rectangle, {X, Y}, H, W}.
 
 
@@ -54,14 +54,19 @@ bitsTailRec(N, Sum) ->
 
 
 perimeter_test()->
-	 ?assert(perimeter({rectangle, {0, 0}, 5, 5}) =:= 20),
-	 ?assert(perimeter({circle, {0, 0}, 10}) =:= 62.83185307179586),
-	 ?assert(perimeter({triangle, {0, 0}, 5, 6, 7}) =:= 18).
+	?assert(perimeter({rectangle, {0, 0}, 5, 5}) =:= 20),
+	?assert(perimeter({circle, {0, 0}, 10}) =:= 62.83185307179586),
+	?assert(perimeter({triangle, {0, 0}, 5, 6, 7}) =:= 18).
 
 area_test()->
-	 ?assert(area({rectangle, {0, 0}, 5, 5}) =:= 25),
-	 ?assert(area({circle, {0, 0}, 10}) =:= 314.1592653589793),
-	 ?assert(area({triangle, {0, 0}, 5, 6, 7}) =:= 14.696938456699069).
+	?assert(area({rectangle, {0, 0}, 5, 5}) =:= 25),
+	?assert(area({circle, {0, 0}, 10}) =:= 314.1592653589793),
+	?assert(area({triangle, {0, 0}, 5, 6, 7}) =:= 14.696938456699069).
+
+enclose_test() ->
+	?assert(enclose({rectangle, {0, 0}, 5, 5}) =:= {rectangle, {0, 0}, 5, 5}),
+	?assert(enclose({circle, {0, 0}, 10}) =:= {rectangle,{0,0},20,20}),
+	?assert(enclose({triangle, {0, 0}, 5, 6, 7}) =:= {rectangle,{0,0},22.393876913398138,7}).	
 
 bits_test() ->
 	?assert(bits(8) =:= bitsTail(8)),
