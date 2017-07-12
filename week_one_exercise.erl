@@ -20,7 +20,7 @@ area({rectangle, {_X,_Y}, H, W}) ->
 	H * W;
 
 area({triangle, {_X,_Y}, A, B, C}) ->
-	S = (A + B + C)/2,
+	S = semiperimeter(A, B, C),
 	math:sqrt(S*(S-A)*(S-B)*(S-C)).
 
 enclose({circle, {X, Y}, R}) ->
@@ -30,11 +30,12 @@ enclose({rectangle, {X, Y}, H, W}) ->
 	{rectangle, {X, Y}, H, W};
 
 enclose({triangle, {X, Y}, A, B, C}) ->
-	Ar = area({triangle, {X, Y}, A, B, C}),
-	W = erlang:max(erlang:max(A,B),C),
-	H = (Ar * 2) - W,
-	{rectangle, {X, Y}, H, W}.
+	S = semiperimeter(A, B, C),
+	R = (A*B*C)/(4*math:sqrt(S*(S-A)*(S-B)*(S-C))),
+	enclose({circle, {X, Y}, R}).
 
+semiperimeter(A, B, C) ->
+	(A + B + C)/2.
 
 bits(0) -> 
 	0;
@@ -66,7 +67,7 @@ area_test()->
 enclose_test() ->
 	?assert(enclose({rectangle, {0, 0}, 5, 5}) =:= {rectangle, {0, 0}, 5, 5}),
 	?assert(enclose({circle, {0, 0}, 10}) =:= {rectangle,{0,0},20,20}),
-	?assert(enclose({triangle, {0, 0}, 5, 6, 7}) =:= {rectangle,{0,0},22.393876913398138,7}).	
+	?assert(enclose({triangle, {0, 0}, 10, 10, 10}) =:= {rectangle,{0,0},11.547005383792516,11.547005383792516}).
 
 bits_test() ->
 	?assert(bits(8) =:= bitsTail(8)),
