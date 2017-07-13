@@ -1,3 +1,11 @@
+%%%-------------------------------------------------------------------
+%%% @author Gaizka Rubio Landaluze
+%%% @doc
+%%% My solution to the first week exercises of future learn.
+%%% @end
+%%% Created : 13. Jul 2017 11:28 AM
+%%%-------------------------------------------------------------------
+
 -module(week_one_exercise).
 
 -export([perimeter/1, area/1, enclose/1, bits/1, bitsTail/1]). 
@@ -19,6 +27,7 @@ area({circle, {_X,_Y}, R}) ->
 area({rectangle, {_X,_Y}, H, W}) ->
 	H * W;
 
+%% We use Heron formula to get the area
 area({triangle, {_X,_Y}, A, B, C}) ->
 	S = semiperimeter(A, B, C),
 	math:sqrt(S*(S-A)*(S-B)*(S-C)).
@@ -29,6 +38,7 @@ enclose({circle, {X, Y}, R}) ->
 enclose({rectangle, {X, Y}, H, W}) ->
 	{rectangle, {X, Y}, H, W};
 
+%% We suppose that X and Y are the coords of the circumcenter
 enclose({triangle, {X, Y}, A, B, C}) ->
 	S = semiperimeter(A, B, C),
 	R = (A*B*C)/(4*math:sqrt(S*(S-A)*(S-B)*(S-C))),
@@ -54,6 +64,7 @@ bitsTailRec(N, Sum) ->
 	bitsTailRec(N bsr 1, Sum + (N band 1)).
 
 
+%% Test for each of the functions
 perimeter_test()->
 	?assert(perimeter({rectangle, {0, 0}, 5, 5}) =:= 20),
 	?assert(perimeter({circle, {0, 0}, 10}) =:= 62.83185307179586),
@@ -73,4 +84,3 @@ bits_test() ->
 	?assert(bits(8) =:= bitsTail(8)),
 	?assert(bits(7) =:= bitsTail(7)),
 	?assert(bits(0) =:= bitsTail(0)).
-
